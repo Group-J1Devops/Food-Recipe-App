@@ -16,6 +16,10 @@ app.get("/", (req, res) => {
 const userAuthRoutes = require("./routes/users/userAuthroutes");
 app.use("/userauth/api", userAuthRoutes);
 
+//recipe routes
+const recipeRoutes = require("./routes/recipes/recipeAuthRoutes")
+app.use("/recipe/api", recipeRoutes);
+
 //start server
 app.listen(port, () => {
   console.log(`start server at port number ${port}`);

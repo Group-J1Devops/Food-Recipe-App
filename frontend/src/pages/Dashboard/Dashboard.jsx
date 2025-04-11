@@ -7,7 +7,7 @@ const Dashboard = () => {
   return (
     <>
       <Container>
-        <h1 className="text-center mt-5">Explore Recipes</h1>
+        <h1 className="text-center mt-5">Explore Recipes on RecipEasy</h1>
 
         <section className="mx-auto">
           {/* Search Section */}

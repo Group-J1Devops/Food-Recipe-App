@@ -7,6 +7,41 @@
     text-align: center;
     margin-bottom: 2rem;
 
+    .actions {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    
+      .icon-btn {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        transition: all 0.3s ease;
+    
+        &.edit-btn {
+          color: #2980b9;
+    
+          &:hover {
+            color: #1c5980;
+            transform: scale(1.1);
+          }
+        }
+    
+        &.delete-btn {
+          color: #e74c3c;
+    
+          &:hover {
+            color: #c0392b;
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+    
+
     h1 {
       font-size: 2.5rem;
       font-weight: 700;
@@ -137,7 +172,7 @@
 
   .right-panel {
     flex: 1;
-    max-width: 400px;
+    max-width: 600px;
 
     .note-card {
       border: none;
@@ -172,4 +207,33 @@
       }
     }
   }
+}
+
+// Show more/less styling
+.show-more-btn {
+  background-color: transparent;
+  border: none;
+  color: #d54215;
+  font-weight: 600;
+  margin-top: 1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #a92f0b;
+    text-decoration: underline;
+  }
+}
+
+.short-note {
+  max-height: 120px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+.full-note {
+  max-height: none;
 }

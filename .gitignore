@@ -9,6 +9,8 @@ server/env
 /node_modules/*
 */node_modules/*
 
+test_db
+
 # Created by https://www.toptal.com/developers/gitignore/api/node,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,react
 

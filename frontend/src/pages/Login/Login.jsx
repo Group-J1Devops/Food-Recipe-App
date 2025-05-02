@@ -1,110 +1,109 @@
-import React, { useState } from "react";
-import "./Login.scss";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import toast from "react-hot-toast";
-import { userLogin } from "../../redux/slice/userAuthSlice/userAuthSlice";
+import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { NavLink } from 'react-router-dom';
+
+import './Login.scss';
+import { useLoginMutation } from '../../redux/features/api/auth';
 
 const Login = () => {
-  const [passwordShow, setPasswordShow] = useState(false);
+  const [passwordShow, setPasswordShow] = React.useState(false);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const [inputValue, setInputValue] = useState({
-    email: "",
-    password: "",
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setInputValue({
-      ...inputValue,
+    setForm((prevState) => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
   };
 
-  const handleSumbit = (e) => {
-    e.preventDefault();
+  const [signIn, { isLoading, error, data, isSuccess }] = useLoginMutation();
 
-    const { email, password } = inputValue;
+  React.useEffect(() => {
+    if (error) toast.error(String(error?.data?.errorMessage || error?.message || 'Login: An error occurred'));
+  }, [error]);
 
-    if (email === "") {
-      toast.error("Email is required");
-    } else if (!email.includes("@")) {
-      toast.error("Please enter a valid Email");
-    } else if (password === "") {
-      toast.error("Password is required");
-    } else {
-      dispatch(userLogin(inputValue))
-        .then((res) => {
-          if (res.payload !== undefined) {
-            navigate("/");
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
+  React.useEffect(() => {
+    if (isSuccess && data) {
+      window.location.reload();
+      localStorage.setItem('user', JSON.stringify(data));
     }
-  };
+  }, [isSuccess, data]);
+
+  const handleSumbit = React.useCallback(
+    (form) => {
+      const { email, password } = form;
+
+      if (email === '') {
+        toast.error('Email is required');
+      } else if (!email.includes('@')) {
+        toast.error('Please enter a valid Email');
+      } else if (password === '') {
+        toast.error('Password is required');
+      } else {
+        signIn(form);
+      }
+    },
+    [signIn]
+  );
 
   return (
-    <>
-      <section>
-        <div className="form-data">
-          <div className="form-heading">
-            <h2>Sign in to RecipeEasy</h2>
+    <motion.section initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+      <div className="form-data glass-effect">
+        <div className="form-heading">
+          <h2>Welcome Back 👋</h2>
+          <p>
+            Sign in to continue using <strong>RecipeEasy</strong>
+          </p>
+        </div>
+
+        <div className="profile_div text-center">
+          <img src="/Recipeasy-logo.png" alt="Recipeasy logo" />
+        </div>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!isLoading) handleSumbit(form);
+          }}
+        >
+          <div className="form_input">
+            <label htmlFor="email">Email</label>
+            <input type="email" name="email" onChange={handleChange} placeholder="Enter your email address" />
           </div>
 
-          <div className="profile_div text-center">
-            <img src="/Recipeasy-logo.png" alt="" style={{ width: "90px" }} />
-          </div>
-
-          <form>
-            <div className="form_input">
-              <label htmlFor="email">Email</label>
+          <div className="form_input">
+            <label htmlFor="password">Password</label>
+            <div className="two">
               <input
-                type="email"
-                name="email"
+                type={!passwordShow ? 'password' : 'text'}
                 onChange={handleChange}
-                id=""
-                placeholder="Enter your email address"
+                name="password"
+                placeholder="Enter your password"
               />
-            </div>
-
-            <div className="form_input">
-              <label htmlFor="password">Password</label>
-              <div className="two">
-                <input
-                  type={!passwordShow ? "password" : "text"}
-                  onChange={handleChange}
-                  name="password"
-                  id=""
-                  placeholder="Enter your password"
-                />
-                <div
-                  className="showpass"
-                  onClick={() => setPasswordShow(!passwordShow)}
-                >
-                  {!passwordShow ? "Show" : "Hide"}
-                </div>
+              <div className="showpass" onClick={() => setPasswordShow(!passwordShow)}>
+                {!passwordShow ? 'Show' : 'Hide'}
               </div>
             </div>
+          </div>
 
-            <button className="btn" onClick={handleSumbit}>
-              Login
-            </button>
-            <p>
-              Don't have an account? <NavLink to={"/register"}>Sign Up</NavLink>
-            </p>
-            <p>
-              Forgot Password?
-              <NavLink to={"/forgotpassword"}>Click Here</NavLink>
-            </p>
-          </form>
-        </div>
-      </section>
-    </>
+          <button disabled={isLoading} type="submit" className="btn">
+            {!isLoading ? 'Login' : 'Signing in...'}
+          </button>
+          <p>
+            Don't have an account? <NavLink to="/register">Sign Up</NavLink>
+          </p>
+          <p>
+            Forgot Password? <NavLink to="/forgotpassword">Click Here</NavLink>
+          </p>
+        </form>
+      </div>
+    </motion.section>
   );
 };
 

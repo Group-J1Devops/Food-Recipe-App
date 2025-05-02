@@ -1,18 +1,21 @@
-import React, { useState } from "react";
-import "./CreateRecipe.scss";
-import toast from "react-hot-toast";
+import React, { useState } from 'react';
+import './CreateRecipe.scss';
+import toast, { LoaderIcon } from 'react-hot-toast';
+import { useCreateRecipeMutation } from '../../redux/features/api/recipe';
+import { useNavigate } from 'react-router-dom';
 
 const CreateRecipe = () => {
   const [recipeData, setRecipeData] = useState({
-    name: "",
-    description: "",
-    instructions: "",
-    cookingTime: "",
-    ingredients: [""],
+    name: '',
+    description: '',
+    instructions: '',
+    cookingTime: '',
+    ingredients: [''],
   });
 
   const [recipeImage, setRecipeImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +34,7 @@ const CreateRecipe = () => {
   const addIngredient = () => {
     setRecipeData({
       ...recipeData,
-      ingredients: [...recipeData.ingredients, ""],
+      ingredients: [...recipeData.ingredients, ''],
     });
   };
 
@@ -43,34 +46,70 @@ const CreateRecipe = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setRecipeImage(file);
-    setPreview(URL.createObjectURL(file));
+    if (file) {
+      setRecipeImage(file);
+      setPreview(URL.createObjectURL(file));
+    } else {
+      toast.error('No file selected.');
+    }
   };
 
-  const handleSubmit = (e) => {
+  const [createRecipe, { isLoading, error, data, isSuccess, reset }] = useCreateRecipeMutation();
+
+  React.useEffect(() => {
+    if (error) {
+      toast.error(
+        String(
+          error?.data?.errorMessage || error?.data?.error || error?.message || 'Create Recipe: Failed to create recipe.'
+        )
+      );
+    }
+  }, [error]);
+
+  React.useEffect(() => {
+    if (isSuccess && data.recipeData._id) {
+      reset();
+      toast.success('Recipe created successfully!');
+      navigate('/RecipeDetails/' + data.recipeData._id);
+    }
+  }, [isSuccess, navigate, data, reset]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!recipeData.name || !recipeData.description || !recipeData.instructions || !recipeData.cookingTime || !recipeImage || recipeData.ingredients.length === 0) {
-      toast.error("All fields are required.");
+
+    if (isLoading) return;
+
+    if (
+      !recipeData.name ||
+      !recipeData.description ||
+      !recipeData.instructions ||
+      !recipeData.cookingTime ||
+      !recipeImage ||
+      recipeData.ingredients.length === 0
+    ) {
+      toast.error('All fields are required.');
       return;
     }
-    // submit logic here
-    toast.success("Recipe created successfully!");
+
+    const formData = new FormData();
+    formData.append('recipename', recipeData.name); // FIXED
+    formData.append('description', recipeData.description);
+    formData.append('instructions', recipeData.instructions);
+    formData.append('cookingTime', recipeData.cookingTime);
+    formData.append('recipeImg', recipeImage); // FIXED
+
+    recipeData.ingredients.forEach((ingredient) => {
+      formData.append('ingredients[]', ingredient);
+    });
+
+    createRecipe(formData);
   };
-
-  console.log("CreateRecipe component mounted");
-
 
   return (
     <div className="create-recipe-container">
       <h2>Create a New Recipe</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Recipe Name"
-          value={recipeData.name}
-          onChange={handleChange}
-        />
+      <form onSubmit={handleSubmit} className="fade-in">
+        <input type="text" name="name" placeholder="Recipe Name" value={recipeData.name} onChange={handleChange} />
 
         <textarea
           name="description"
@@ -79,11 +118,7 @@ const CreateRecipe = () => {
           onChange={handleChange}
         />
 
-        <input
-          type="file"
-          onChange={handleImageChange}
-          accept="image/*"
-        />
+        <input type="file" name="recipeImg" onChange={handleImageChange} accept=".jpeg,.jpg,.png" />
 
         {preview && <img src={preview} alt="preview" className="preview-img" />}
 
@@ -108,12 +143,14 @@ const CreateRecipe = () => {
             <div key={index} className="ingredient-input">
               <input
                 type="text"
-                value={ingredient}
+                value={ingredient || ''}
                 onChange={(e) => handleIngredientChange(index, e.target.value)}
                 placeholder={`Ingredient ${index + 1}`}
               />
               {index > 0 && (
-                <button type="button" onClick={() => removeIngredient(index)}>Remove</button>
+                <button type="button" onClick={() => removeIngredient(index)}>
+                  Remove
+                </button>
               )}
             </div>
           ))}
@@ -122,8 +159,14 @@ const CreateRecipe = () => {
           </button>
         </div>
 
-        <button type="submit" className="submit-btn">
-          Create Recipe
+        <button type="submit" className="submit-btn" disabled={isLoading}>
+          {isLoading ? (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <LoaderIcon />
+            </div>
+          ) : (
+            'Create Recipe'
+          )}
         </button>
       </form>
     </div>

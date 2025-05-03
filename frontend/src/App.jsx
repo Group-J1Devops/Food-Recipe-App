@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Outlet } from 'react-router-dom';
-import Header from './layouts/header';
+import Header from "./layouts/Header"
 import Authenticated from './layouts/protection/authenticated';
 import NotAuthenticated from './layouts/protection/not-authenticated';
 import Login from './pages/Login/Login';

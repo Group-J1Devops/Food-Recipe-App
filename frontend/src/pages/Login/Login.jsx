@@ -30,6 +30,7 @@ const Login = () => {
 
   React.useEffect(() => {
     if (isSuccess && data) {
+      toast.success("Login Successful!")
       window.location.reload();
       localStorage.setItem('user', JSON.stringify(data));
     }

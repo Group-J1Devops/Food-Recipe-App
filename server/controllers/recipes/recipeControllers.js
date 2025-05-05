@@ -113,7 +113,7 @@ exports.getRecipeData = async (req, res) => {
   const { page, search } = req.query;
   const pageNum = page || 1;
   const searchValue = search || '';
-  const ITEM_PER_PAGE = 8;
+  const ITEM_PER_PAGE = 9;
 
   const query = {
     $or: [
@@ -129,7 +129,7 @@ exports.getRecipeData = async (req, res) => {
     const count = await recipeDB.countDocuments(query);
 
     //page count
-    const pageCount = Math.ceil(count / ITEM_PER_PAGE); // 8 / 4 = 2
+    const pageCount = Math.ceil(count / ITEM_PER_PAGE); // 9 / 4 = 2
 
     const allRecipeData = await recipeDB.aggregate([
       {

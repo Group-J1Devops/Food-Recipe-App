@@ -52,16 +52,18 @@ pipeline {
             }
         }
  
-        stage('Start Services') {
-            steps {
-                dir('server') {
-                   bat 'start "" cmd /c "node index.js"'
+    stage('Start Services') {
+    steps {
+        dir('server') {
+            bat 'start "" cmd /c "node index.js"'
         }
-                dir('frontend') {
-                  bat 'start "" cmd /c "npm start"'
+        dir('frontend') {
+            bat 'start "" cmd /c "npm start"'
         }
+        sleep time: 10, unit: 'SECONDS'
     }
 }
+
 
     }
  

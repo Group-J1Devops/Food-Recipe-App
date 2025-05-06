@@ -57,9 +57,7 @@ pipeline {
                   dir('server') {
                       bat 'node index.js'
                   }
-            }
-            steps {
-                  dir('frontend') {
+                dir('frontend') {
                       bat 'npm start'
                   }
             }

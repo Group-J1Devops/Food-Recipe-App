@@ -30,6 +30,7 @@ pipeline {
         stage('Start backend service') {
             steps {
                 dir('server') {
+                     bat 'npm install'
                      bat 'node index.js'
                 }
             }

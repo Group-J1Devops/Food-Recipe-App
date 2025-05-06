@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     environment {
         DB_CONNECTION = credentials('DB_CONNECTION')
         EMAIL = credentials('EMAIL')
@@ -9,7 +10,7 @@ pipeline {
         EMAIL_PORT = credentials('EMAIL_PORT')
         FRONTEND_PORT = credentials('FRONTEND_PORT')
     }
- 
+
     stages {
         stage('Prepare Environment') {
             steps {
@@ -26,44 +27,33 @@ pipeline {
                 }
             }
         }
- 
-        stage('Install backend Dependencies') {
+
+        stage('Install Dependencies') {
             steps {
                 dir('server') {
-                     bat 'npm install'
+                    bat 'npm install'
+                }
+                dir('frontend') {
+                    bat 'npm install'
                 }
             }
         }
 
-        stage('Install frontend Dependencies') {
-            steps {
-                dir('frontend') {
-                     bat 'npm install'
-                }
-            }
-        }
- 
         stage('Run Tests') {
             steps {
-                    echo 'Running Tests'
-//                 dir('study-buddy-backend') {
-//                     bat 'mvn test'
-//                 }
+                echo 'Running Tests'
+                // Add tests here if needed
             }
         }
- 
-        stage('Start Services') {
+
+        stage('Build and Start with Docker Compose') {
             steps {
-                  dir('server') {
-                      bat 'node index.js'
-                  }
-                dir('frontend') {
-                      bat 'npm start'
-                  }
+                bat 'docker-compose down'
+                bat 'docker-compose up -d --build'
             }
         }
     }
- 
+
     post {
         success {
             mail to: 'ireeyy35@gmail.com, osi2crt@bolton.ac.uk',

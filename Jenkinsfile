@@ -27,19 +27,18 @@ pipeline {
             }
         }
  
-        stage('Start backend service') {
+        stage('Install backend Dependencies') {
             steps {
                 dir('server') {
                      bat 'npm install'
-                     bat 'node index.js'
                 }
             }
         }
 
-        stage('Start frontend service') {
+        stage('Install frontend Dependencies') {
             steps {
                 dir('frontend') {
-                     bat 'npm start'
+                     bat 'npm install'
                 }
             }
         }
@@ -53,14 +52,18 @@ pipeline {
             }
         }
  
-        // stage('Start Services') {
-        //     steps {
-        //           dir('server') {
-        //               sh 'docker-compose down'
-        //               sh 'docker-compose up -d'
-        //           }
-        //     }
-        // }
+        stage('Start Services') {
+            steps {
+                  dir('server') {
+                      bat 'node index.js'
+                  }
+            }
+            steps {
+                  dir('frontend') {
+                      bat 'npm start'
+                  }
+            }
+        }
     }
  
     post {

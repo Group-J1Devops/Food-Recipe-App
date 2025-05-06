@@ -30,7 +30,7 @@ pipeline {
         stage('Start backend service') {
             steps {
                 dir('server') {
-                     bat 'nodemon index.js'
+                     bat 'node index.js'
                 }
             }
         }

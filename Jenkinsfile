@@ -54,10 +54,10 @@ pipeline {
     stage('Start Services') {
     steps {
         dir('server') {
-            bat 'start "" cmd /c "node index.js"'
+            bat "node index.js"
         }
         dir('frontend') {
-            bat 'start "" cmd /c "npm start"'
+            bat "npm start"
         }
         sleep time: 10, unit: 'SECONDS'
     }

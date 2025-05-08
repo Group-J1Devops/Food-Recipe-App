@@ -61,13 +61,6 @@ pipeline {
             }
         }
 
-        stage('Check Services') {
-            steps {
-                bat 'curl http://localhost:3000'   // Adjust if needed
-                bat 'curl http://localhost:5002'
-            }
-        }
-
         stage('Show PM2 Status') {
             steps {
                 bat ' npx pm2 list'

@@ -8,6 +8,7 @@ pipeline {
         EMAIL_HOST = credentials('EMAIL_HOST')
         EMAIL_PORT = credentials('EMAIL_PORT')
         FRONTEND_PORT = credentials('FRONTEND_PORT')
+        BACKTEND_PORT = credentials('BACKEND_PORT')
     }
  
     stages {
@@ -22,6 +23,7 @@ pipeline {
                         EMAIL_HOST=${env.EMAIL_HOST}
                         EMAIL_PORT=${env.EMAIL_PORT}
                         FRONTEND_PORT=${env.FRONTEND_PORT}
+                        BACKEND_PORT=${env.BACKEND_PORT}
                     """
                 }
             }
@@ -60,6 +62,7 @@ pipeline {
         sleep time: 10, unit: 'SECONDS'
     }
 }
+
 
     }
 }

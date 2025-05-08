@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     environment {
         DB_CONNECTION = credentials('DB_CONNECTION')
         EMAIL = credentials('EMAIL')
@@ -10,7 +11,7 @@ pipeline {
         FRONTEND_PORT = credentials('FRONTEND_PORT')
         BACKEND_PORT = credentials('BACKEND_PORT')
     }
- 
+
     stages {
         stage('Prepare Environment') {
             steps {
@@ -28,59 +29,49 @@ pipeline {
                 }
             }
         }
- 
-        stage('Install backend Dependencies') {
+
+        stage('Install Backend Dependencies') {
             steps {
                 dir('server') {
-                     bat 'npm install'
+                    bat 'npm install'
                 }
             }
         }
 
-        stage('Install frontend Dependencies') {
+        stage('Install Frontend Dependencies') {
             steps {
                 dir('frontend') {
-                     bat 'npm install'
+                    bat 'npm install'
                 }
             }
         }
- 
-        stage('Run Tests') {
+
+        stage('Install PM2') {
             steps {
-                    echo 'Running Tests'
+                bat 'npm install -g pm2'
             }
         }
- 
-        stage('Start Services') {
+
+        stage('Start Services with PM2') {
             steps {
-                powershell '''
-                Start-Process -FilePath "node" -ArgumentList "index.js" -WorkingDirectory "server" -WindowStyle Hidden
-                Start-Process -FilePath "npm" -ArgumentList "start" -WorkingDirectory "frontend" -WindowStyle Hidden
-                '''
-                sleep time: 10, unit: 'SECONDS'
-    }
-}
+                // Start both services using PM2
+                bat 'pm2 start ecosystem.config.js'
+                // Optional: save process list to resurrect after reboot
+                bat 'pm2 save'
+            }
+        }
 
         stage('Check Services') {
             steps {
-                bat 'curl http://localhost:3000'         // Frontend (adjust port)
-                bat 'curl http://localhost:5002'  // Backend endpoint (adjust path)
-    }
-}
-        stage('Show Logs') {
+                bat 'curl http://localhost:3000'   // Adjust if needed
+                bat 'curl http://localhost:5002'
+            }
+        }
+
+        stage('Show PM2 Status') {
             steps {
-                dir('server') {
-                bat 'type backend.log'
+                bat 'pm2 list'
+            }
         }
-                dir('frontend') {
-                bat 'type frontend.log'
-        }
-    }
-}
-
-
-
-
-
     }
 }

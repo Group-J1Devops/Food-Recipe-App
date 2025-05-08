@@ -8,7 +8,7 @@ pipeline {
         EMAIL_HOST = credentials('EMAIL_HOST')
         EMAIL_PORT = credentials('EMAIL_PORT')
         FRONTEND_PORT = credentials('FRONTEND_PORT')
-        BACKTEND_PORT = credentials('BACKEND_PORT')
+        BACKEND_PORT = credentials('BACKEND_PORT')
     }
  
     stages {

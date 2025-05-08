@@ -53,15 +53,14 @@ pipeline {
  
         stage('Start Services') {
             steps {
-                dir('server') {
-                    bat 'start "" cmd /c "node index.js > backend.log 2>&1"'
-        }
-                dir('frontend') {
-                bat 'start "" cmd /c "npm start > frontend.log 2>&1"'
-        }
+                powershell '''
+                Start-Process -FilePath "node" -ArgumentList "index.js" -WorkingDirectory "server" -WindowStyle Hidden
+                Start-Process -FilePath "npm" -ArgumentList "start" -WorkingDirectory "frontend" -WindowStyle Hidden
+                '''
                 sleep time: 10, unit: 'SECONDS'
     }
 }
+
         stage('Check Services') {
             steps {
                 bat 'curl http://localhost:3000'         // Frontend (adjust port)

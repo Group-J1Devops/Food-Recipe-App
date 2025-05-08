@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
       {
-        name: "backend",
+        name: "server",
         script: "index.js",
         cwd: "./server",
         env: {
@@ -14,7 +14,11 @@ module.exports = {
         script: "npm",
         args: "start",
         cwd: "./frontend",
-        interpreter: "cmd.exe"
+        interpreter: "cmd.exe",
+        interpreter_args: "/c",
+        env: {
+          PORT: 3000
+        }
       }
     ]
   };

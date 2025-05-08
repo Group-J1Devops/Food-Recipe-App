@@ -71,7 +71,7 @@ pipeline {
         post {
         always {
             echo 'Stopping services after build...'
-            bat 'npx stop all'
+            bat 'npx pm2 stop all'
         }
     }
 }

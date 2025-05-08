@@ -51,17 +51,36 @@ pipeline {
             }
         }
  
-    stage('Start Services') {
-    steps {
-        dir('server') {
-            bat "node index.js"
+        stage('Start Services') {
+            steps {
+                dir('server') {
+                    bat 'start "" cmd /c "node index.js > backend.log 2>&1"'
         }
-        dir('frontend') {
-            bat "npm start"
+                dir('frontend') {
+                bat 'start "" cmd /c "npm start > frontend.log 2>&1"'
         }
-        sleep time: 10, unit: 'SECONDS'
+                sleep time: 10, unit: 'SECONDS'
     }
 }
+        stage('Check Services') {
+            steps {
+                bat 'curl http://localhost:3000'         // Frontend (adjust port)
+                bat 'curl http://localhost:5002'  // Backend endpoint (adjust path)
+    }
+}
+        stage('Show Logs') {
+            steps {
+                dir('server') {
+                bat 'type backend.log'
+        }
+                dir('frontend') {
+                bat 'type frontend.log'
+        }
+    }
+}
+
+
+
 
 
     }

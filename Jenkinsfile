@@ -55,9 +55,9 @@ pipeline {
         stage('Start Services with PM2') {
             steps {
                 // Start both services using PM2
-                bat '"C:\\Users\\ireeyy\\AppData\\Roaming\\npm\\pm2.cmd" start ecosystem.config.js'
+                bat 'npx pm2 start ecosystem.config.js'
                 // Optional: save process list to resurrect after reboot
-                bat 'pm2 save'
+                bat 'npx pm2 save'
             }
         }
 
@@ -70,7 +70,7 @@ pipeline {
 
         stage('Show PM2 Status') {
             steps {
-                bat 'pm2 list'
+                bat ' npx pm2 list'
             }
         }
     }

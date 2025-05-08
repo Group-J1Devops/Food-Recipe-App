@@ -46,9 +46,6 @@ pipeline {
         stage('Run Tests') {
             steps {
                     echo 'Running Tests'
-//                 dir('study-buddy-backend') {
-//                     bat 'mvn test'
-//                 }
             }
         }
  
@@ -64,19 +61,5 @@ pipeline {
     }
 }
 
-
-    }
- 
-    post {
-        success {
-            mail to: 'ireeyy35@gmail.com, osi2crt@bolton.ac.uk',
-                 subject: "✅ CI/CD Deployment Success - RecipEasy",
-                 body: "The latest deployment of RecipEasy completed successfully."
-        }
-        failure {
-            mail to: 'ireeyy35@gmail.com, osi2crt@bolton.ac.uk',
-                 subject: "❌ CI/CD Deployment Failed - RecipEasy",
-                 body: "The deployment of RecipEasy failed. Please check Jenkins for logs."
-        }
     }
 }

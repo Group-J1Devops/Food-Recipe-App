@@ -48,25 +48,19 @@ pipeline {
 
         stage('Install PM2') {
             steps {
-                dir('server'){
-                    sh 'npm install pm2 --save-dev'
-                }
+                sh 'npm install pm2 --save-dev'
             }
         }
 
         stage('Start Services with PM2') {
             steps {
-                dir('server') {
-                    sh 'npx pm2 start ecosystem.config.js'
-                }
+                sh 'npx pm2 start ecosystem.config.js'
             }
         }
 
         stage('Show PM2 Status') {
             steps {
-                dir('server') {
                     sh 'npx pm2 list'
-                }
             }
         }
     }

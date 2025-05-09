@@ -1,5 +1,3 @@
-local Jenkins pipeline
-
 pipeline {
     agent any
 

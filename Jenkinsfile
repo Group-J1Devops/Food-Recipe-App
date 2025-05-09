@@ -10,6 +10,7 @@ pipeline {
         EMAIL_PORT = credentials('EMAIL_PORT')
         FRONTEND_PORT = credentials('FRONTEND_PORT')
         BACKEND_PORT = credentials('BACKEND_PORT')
+        HOST = credentials('HOST')
     }
 
     stages {
@@ -38,7 +39,12 @@ pipeline {
         stage('Install Backend Dependencies') {
             steps {
                 dir('server') {
-                    sh 'npm install'
+                    sh '''
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                        nvm use --lts
+                        npm install
+                    '''
                 }
             }
         }
@@ -46,31 +52,51 @@ pipeline {
         stage('Install Frontend Dependencies') {
             steps {
                 dir('frontend') {
-                    sh 'npm install'
+                    sh '''
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                        nvm use --lts
+                        npm install
+                    '''
                 }
             }
         }
 
         stage('Install PM2') {
             steps {
-                sh 'npm install -g pm2'
+                sh '''
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    nvm use --lts
+                    npm install -g pm2
+                '''
             }
         }
 
         stage('Start Services with PM2') {
             steps {
-                sh 'npx pm2 start ecosystem.config.js'
+                sh '''
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    nvm use --lts
+                    npx pm2 start ecosystem.config.js
+                '''
             }
         }
 
         stage('Show PM2 Status') {
             steps {
-                    sh 'npx pm2 list'
+                sh '''
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    nvm use --lts
+                    npx pm2 list
+                '''
             }
         }
     }
 
-        post {
+    post {
         success {
             echo 'RecipEasy software build completed successfully'
         }

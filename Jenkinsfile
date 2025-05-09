@@ -48,7 +48,9 @@ pipeline {
 
         stage('Install PM2') {
             steps {
-                sh 'npm install pm2 --save-dev'
+                dir('server'){
+                    sh 'npm install pm2 --save-dev'
+                }
             }
         }
 

@@ -57,9 +57,14 @@ pipeline {
             }
         }
 
-        stage('Start Services with PM2') {
+        stage('Delete any running Services with PM2') {
             steps {
                 sh 'npx pm2 delete all'
+            }
+        }
+
+        stage('Start Services with PM2') {
+            steps {
                 sh 'npx pm2 start ecosystem.config.js'
             }
         }

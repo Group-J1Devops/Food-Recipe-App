@@ -33,7 +33,7 @@ pipeline {
         stage('Install Backend Dependencies') {
             steps {
                 dir('server') {
-                    bat 'npm install'
+                    sh 'npm install'
                 }
             }
         }
@@ -41,29 +41,29 @@ pipeline {
         stage('Install Frontend Dependencies') {
             steps {
                 dir('frontend') {
-                    bat 'npm install'
+                    sh 'npm install'
                 }
             }
         }
 
         stage('Install PM2') {
             steps {
-                bat 'npm install -g pm2'
+                sh 'npm install -g pm2'
             }
         }
 
         stage('Start Services with PM2') {
             steps {
                 // Start both services using PM2
-                bat 'npx pm2 start ecosystem.config.js'
+                sh 'npx pm2 start ecosystem.config.js'
                 // Optional: save process list to resurrect after reboot
-                bat 'npx pm2 save'
+                sh 'npx pm2 save'
             }
         }
 
         stage('Show PM2 Status') {
             steps {
-                bat ' npx pm2 list'
+                sh ' npx pm2 list'
             }
         }
     }

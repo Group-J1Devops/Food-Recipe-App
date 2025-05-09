@@ -39,12 +39,7 @@ pipeline {
         stage('Install Backend Dependencies') {
             steps {
                 dir('server') {
-                    sh '''
-                        export NVM_DIR="$HOME/.nvm"
-                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-                        nvm use --lts
-                        npm install
-                    '''
+                    sh 'npm install'
                 }
             }
         }
@@ -52,51 +47,31 @@ pipeline {
         stage('Install Frontend Dependencies') {
             steps {
                 dir('frontend') {
-                    sh '''
-                        export NVM_DIR="$HOME/.nvm"
-                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-                        nvm use --lts
-                        npm install
-                    '''
+                    sh 'npm install'
                 }
             }
         }
 
         stage('Install PM2') {
             steps {
-                sh '''
-                    export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-                    nvm use --lts
-                    npm install -g pm2
-                '''
+                sh 'npm install -g pm2'
             }
         }
 
         stage('Start Services with PM2') {
             steps {
-                sh '''
-                    export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-                    nvm use --lts
-                    npx pm2 start ecosystem.config.js
-                '''
+                sh 'npx pm2 start ecosystem.config.js'
             }
         }
 
         stage('Show PM2 Status') {
             steps {
-                sh '''
-                    export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-                    nvm use --lts
-                    npx pm2 list
-                '''
+                    sh 'npx pm2 list'
             }
         }
     }
 
-    post {
+        post {
         success {
             echo 'RecipEasy software build completed successfully'
         }

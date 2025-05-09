@@ -4,6 +4,7 @@ const app = express();
 require("./db/connection");
 const cors = require("cors");
 const port = 5002;
+const host = '0.0.0.0'
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +22,6 @@ const recipeRoutes = require("./routes/recipes/recipeAuthRoutes")
 app.use("/recipe/api", recipeRoutes);
 
 //start server
-app.listen(port, '0.0.0.0', () => {
-  console.log(`start server at port number ${port}`);
+app.listen(port, host, () => {
+  console.log(`start server at ${host} port number ${port}`);
 });

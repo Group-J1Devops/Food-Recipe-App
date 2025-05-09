@@ -23,8 +23,13 @@ pipeline {
                         SECRET_KEY=${env.SECRET_KEY}
                         EMAIL_HOST=${env.EMAIL_HOST}
                         EMAIL_PORT=${env.EMAIL_PORT}
-                        FRONTEND_PORT=${env.FRONTEND_PORT}
                         BACKEND_PORT=${env.BACKEND_PORT}
+                    """
+                }
+                dir('frontend') {
+                    writeFile file: '.env', text: """
+                        FRONTEND_PORT=${env.FRONTEND_PORT}
+                        HOST=${env.HOST}
                     """
                 }
             }

@@ -48,22 +48,23 @@ pipeline {
 
         stage('Install PM2') {
             steps {
-                sh 'npm install -g pm2'
+                sh 'npm install pm2'
             }
         }
 
         stage('Start Services with PM2') {
             steps {
-                // Start both services using PM2
-                sh 'npx pm2 start ecosystem.config.js'
-                // Optional: save process list to resurrect after reboot
-                sh 'npx pm2 save'
+                dir('server') {
+                    sh './node_modules/.bin/pm2 start ecosystem.config.js'
+                }
             }
         }
 
         stage('Show PM2 Status') {
             steps {
-                sh ' npx pm2 list'
+                dir('server') {
+                    sh './node_modules/.bin/pm2 list'
+                }
             }
         }
     }

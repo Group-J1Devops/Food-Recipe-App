@@ -53,7 +53,7 @@ pipeline {
 
         stage('Install PM2') {
             steps {
-                sh 'npm install pm2 --save-dev'
+                sh 'npm install -g pm2'
             }
         }
 

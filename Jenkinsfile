@@ -1,3 +1,5 @@
+local Jenkins pipeline
+
 pipeline {
     agent any
 
@@ -10,7 +12,6 @@ pipeline {
         EMAIL_PORT = credentials('EMAIL_PORT')
         FRONTEND_PORT = credentials('FRONTEND_PORT')
         BACKEND_PORT = credentials('BACKEND_PORT')
-        HOST = credentials('HOST')
     }
 
     stages {
@@ -24,13 +25,8 @@ pipeline {
                         SECRET_KEY=${env.SECRET_KEY}
                         EMAIL_HOST=${env.EMAIL_HOST}
                         EMAIL_PORT=${env.EMAIL_PORT}
-                        BACKEND_PORT=${env.BACKEND_PORT}
-                    """
-                }
-                dir('frontend') {
-                    writeFile file: '.env', text: """
                         FRONTEND_PORT=${env.FRONTEND_PORT}
-                        HOST=${env.HOST}
+                        BACKEND_PORT=${env.BACKEND_PORT}
                     """
                 }
             }
@@ -39,7 +35,7 @@ pipeline {
         stage('Install Backend Dependencies') {
             steps {
                 dir('server') {
-                    sh 'npm install'
+                    bat 'npm install'
                 }
             }
         }
@@ -47,26 +43,29 @@ pipeline {
         stage('Install Frontend Dependencies') {
             steps {
                 dir('frontend') {
-                    sh 'npm install'
+                    bat 'npm install'
                 }
             }
         }
 
         stage('Install PM2') {
             steps {
-                sh 'npm install -g pm2'
+                bat 'npm install -g pm2'
             }
         }
 
         stage('Start Services with PM2') {
             steps {
-                sh 'npx pm2 start ecosystem.config.js'
+                // Start both services using PM2
+                bat 'npx pm2 start ecosystem.config.js'
+                // Optional: save process list to resurrect after reboot
+                bat 'npx pm2 save'
             }
         }
 
         stage('Show PM2 Status') {
             steps {
-                    sh 'npx pm2 list'
+                bat ' npx pm2 list'
             }
         }
     }

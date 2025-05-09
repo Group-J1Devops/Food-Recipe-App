@@ -59,7 +59,7 @@ pipeline {
 
         stage('Delete any running Services with PM2') {
             steps {
-                sh 'npx pm2 delete all'
+                sh 'npx pm2 stop all'
             }
         }
 

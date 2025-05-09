@@ -21,6 +21,6 @@ const recipeRoutes = require("./routes/recipes/recipeAuthRoutes")
 app.use("/recipe/api", recipeRoutes);
 
 //start server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`start server at port number ${port}`);
 });

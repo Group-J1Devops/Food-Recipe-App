@@ -54,18 +54,20 @@ pipeline {
 
         stage('Start Services with PM2') {
             steps {
-                // Start both services using PM2
-                bat 'npx pm2 start ecosystem.config.js'
-                // Optional: save process list to resurrect after reboot
-                bat 'npx pm2 save'
+            steps {
+                dir('server') {
+                    bat 'npx pm2 start ecosystem.config.js'
+                    bat 'npx pm2 save'
+                }
             }
         }
 
         stage('Show PM2 Status') {
             steps {
-                bat 'npx pm2 list'
+                dir('server') {
+                    bat 'npx pm2 list'
+                }
             }
-        }
     }
 
         post {

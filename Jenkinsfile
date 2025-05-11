@@ -46,9 +46,11 @@ pipeline {
             }
         }
 
-        stage('Install PM2') {
+        stage('Install PM2 (Correct Directory)') {
             steps {
-                bat 'npm install pm2 --save-dev'
+                dir('server') {
+                    bat 'npm install pm2 --save-dev'
+                }
             }
         }
 
@@ -56,8 +58,9 @@ pipeline {
             steps {
                 dir('server') {
                     bat 'npx pm2 start ecosystem.config.js'
+                    bat 'npx pm2 save'
                 }
-        }
+            }
         }
 
         stage('Show PM2 Status') {
@@ -66,13 +69,12 @@ pipeline {
                     bat 'npx pm2 list'
                 }
             }
+        }
     }
 
-        post {
+    post {
         success {
             echo 'RecipEasy software build completed successfully'
         }
     }
 }
-    }
-

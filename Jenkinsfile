@@ -54,12 +54,9 @@ pipeline {
 
         stage('Start Services with PM2') {
             steps {
-            steps {
                 dir('server') {
                     bat 'npx pm2 start ecosystem.config.js'
-                    bat 'npx pm2 save'
                 }
-            }
         }
 
         stage('Show PM2 Status') {
@@ -74,5 +71,7 @@ pipeline {
         success {
             echo 'RecipEasy software build completed successfully'
         }
+    }
+}
     }
 }

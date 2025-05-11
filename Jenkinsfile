@@ -54,10 +54,8 @@ pipeline {
 
         stage('Start Services with PM2') {
             steps {
-            steps {
                 dir('server') {
-                    bat 'npx pm2 start ecosystem.config.js'
-                    bat 'npx pm2 save'
+                    bat 'npm install pm2 --save-dev && npx pm2 start ecosystem.config.js && npx pm2 save'
                 }
             }
         }
@@ -68,7 +66,7 @@ pipeline {
                     bat 'npx pm2 list'
                 }
             }
-    }
+        }
 
         post {
         success {

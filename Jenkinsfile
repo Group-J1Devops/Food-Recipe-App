@@ -58,6 +58,7 @@ pipeline {
                     bat 'npx pm2 start ecosystem.config.js'
                 }
         }
+        }
 
         stage('Show PM2 Status') {
             steps {
@@ -74,4 +75,4 @@ pipeline {
     }
 }
     }
-}
+

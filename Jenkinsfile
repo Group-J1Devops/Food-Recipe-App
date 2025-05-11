@@ -48,22 +48,22 @@ pipeline {
 
         stage('Install PM2') {
             steps {
-                bat 'npm install -g pm2'
+                bat 'npm install pm2 --save-dev'
             }
         }
 
         stage('Start Services with PM2') {
             steps {
                 // Start both services using PM2
-                bat 'pm2 start ecosystem.config.js'
+                bat 'npx pm2 start ecosystem.config.js'
                 // Optional: save process list to resurrect after reboot
-                bat 'pm2 save'
+                bat 'npx pm2 save'
             }
         }
 
         stage('Show PM2 Status') {
             steps {
-                bat 'pm2 list'
+                bat 'npx pm2 list'
             }
         }
     }

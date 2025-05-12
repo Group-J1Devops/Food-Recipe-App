@@ -16,7 +16,10 @@ module.exports = {
       args: "start",
       cwd: "./frontend",
       interpreter: "cmd.exe",
-      interpreter_args: "/c"
+      interpreter_args: "/c",
+      env: {
+        PORT: 3000
+      }
     }
   ]
 };

@@ -59,9 +59,9 @@ pipeline {
             }
         }
 
-        stage('Stop pm2 services ') {
+        stage('Show PM2 Status') {
             steps {
-                bat 'npx pm2 stop all'
+                bat 'npx pm2 list'
             }
         }
     }

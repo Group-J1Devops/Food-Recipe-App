@@ -46,28 +46,23 @@ pipeline {
             }
         }
 
-        stage('Install PM2 (Correct Directory)') {
+        stage('Install PM2') {
             steps {
-                dir('server') {
-                    bat 'npm install pm2 --save-dev'
-                }
+                bat 'npm install pm2 --save-dev'
             }
         }
 
         stage('Start Services with PM2') {
             steps {
-                dir('server') {
-                    bat 'npx pm2 start ecosystem.config.js'
-                    bat 'npx pm2 save'
-                }
+                // Run from root, where ecosystem.config.js is located
+                bat 'npx pm2 start ecosystem.config.js'
+                bat 'npx pm2 save'
             }
         }
 
         stage('Show PM2 Status') {
             steps {
-                dir('server') {
-                    bat 'npx pm2 list'
-                }
+                bat 'npx pm2 list'
             }
         }
     }

@@ -17,10 +17,6 @@ module.exports = {
       cwd: "./frontend",
       interpreter: "cmd.exe",
       interpreter_args: "/c",
-      env: {
-        PORT: process.env.FRONTEND_PORT
-      }
-      
     }
   ]
 };

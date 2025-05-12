@@ -52,12 +52,6 @@ pipeline {
             }
         }
 
-                stage('Stop running Services with PM2') {
-            steps {
-                bat 'npx pm2 delete all'
-            }
-        }
-
         stage('Start Services with PM2') {
             steps {
                 bat 'npx pm2 start ecosystem.config.js'
@@ -65,9 +59,9 @@ pipeline {
             }
         }
 
-        stage('Show PM2 Status') {
+        stage('Stop pm2 services ') {
             steps {
-                bat 'npx pm2 list'
+                bat 'npx pm2 stop all'
             }
         }
     }

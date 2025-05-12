@@ -54,7 +54,6 @@ pipeline {
 
         stage('Start Services with PM2') {
             steps {
-                // Run from root, where ecosystem.config.js is located
                 bat 'npx pm2 start ecosystem.config.js'
                 bat 'npx pm2 save'
             }
